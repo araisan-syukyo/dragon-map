@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>日本は龍のからだ？ 日本列島龍体説</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="game-ui">
+        <div id="map-container">
+            <div id="map"></div>
+        </div>
+
+        <header class="glass-panel top-panel">
+            <h1>PROJECT: DRAGON BODY</h1>
+            <div class="subtitle">日本は龍のからだ？ 日本列島龍体説</div>
+        </header>
+
+        <div id="tour-controls" class="glass-panel bottom-panel">
+            <div class="tour-info">龍体巡りツアー: <span id="tour-progress">Ready</span></div>
+            <div class="tour-buttons">
+                <button id="btn-prev" class="glow-btn">◀ Prev</button>
+                <button id="btn-play" class="play-btn glow-btn primary">▶ Start Tour</button>
+                <button id="btn-next" class="glow-btn">Next ▶</button>
+            </div>
+        </div>
+
+        <div id="info-panel" class="hidden panel-exit glass-panel popup-panel">
+            <div class="panel-header">
+                <h2 id="part-name">部位名称</h2>
+                <button class="close-btn" onclick="closePanel()">×</button>
+            </div>
+            <div class="panel-content">
+                <div class="data-block jp-block">
+                    <span class="label">LOCATION (地名)</span>
+                    <span id="jp-loc" class="value">Location Name</span>
+                </div>
+                <div class="panel-emblem">🐉</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
