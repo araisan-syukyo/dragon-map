@@ -1,14 +1,14 @@
 :root {
-    --main-bg: #050510; /* より深い漆黒 */
-    /* 落ち着きのある高級な発光色 */
-    --accent-cyan: #40e0d0; /* ターコイズ */
-    --accent-gold: #c0a060; /* シャンパンゴールド */
-    --text-primary: #f0f0f5;
-    --text-secondary: #a0a0b0;
+    /* 背景を宇宙っぽい濃紺から、少し明るいディープブルーへ */
+    --main-bg: #1a1a2e; 
+    --accent-cyan: #00ffff;
+    --accent-gold: #ffd700;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
     
-    /* グラスモーフィズム用の背景色（半透明） */
-    --glass-bg: rgba(20, 25, 45, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    /* パネルの背景を少し濃くして、文字の可読性を上げる */
+    --glass-bg: rgba(0, 10, 30, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.2);
 }
 
 body, html {
@@ -27,7 +27,7 @@ body, html {
     width: 100%;
 }
 
-/* --- 地図と環境効果 --- */
+/* --- 地図コンテナ --- */
 #map-container {
     position: absolute;
     top: 0; left: 0;
@@ -37,28 +37,22 @@ body, html {
 #map {
     height: 100%;
     width: 100%;
-    background: var(--main-bg);
     z-index: 0;
+    /* 地図自体の明るさはそのまま（衛星写真を見やすく） */
 }
 
-/* ビネット効果（画面の四隅を暗くして没入感を出す） */
+/* ★修正点：画面を暗くしていた「ビネット効果（四隅の影）」を削除しました */
 #map-container::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.7) 100%);
-    pointer-events: none;
-    z-index: 1; /* 地図の上、UIの下 */
+    display: none; 
 }
 
-/* --- 共通グラスモーフィズム・パネルデザイン --- */
+/* --- パネルデザイン --- */
 .glass-panel {
     background: var(--glass-bg);
-    backdrop-filter: blur(12px); /* すりガラス効果の強さ */
-    -webkit-backdrop-filter: blur(12px); /* Safari用 */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 /* ヘッダー */
@@ -67,197 +61,131 @@ body, html {
     top: 20px; left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
-    padding: 12px 30px;
-    border-radius: 30px; /* 丸みを帯びたデザイン */
+    padding: 10px 20px;
+    border-radius: 30px;
     text-align: center;
     width: 90%;
     max-width: 500px;
-    border-top: 1px solid rgba(64, 224, 208, 0.3); /* 上部に微かな青い光 */
 }
 
 h1 {
     margin: 0;
     font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-weight: 300;
-    font-size: 0.9rem;
-    letter-spacing: 4px; /* 文字間を広げてシネマティックに */
+    font-size: 0.8rem;
+    letter-spacing: 2px;
     color: var(--accent-cyan);
-    text-transform: uppercase;
-    opacity: 0.8;
 }
 
 .subtitle {
     font-family: 'Shippori Mincho', serif;
-    font-size: 1.5rem;
-    font-weight: 500;
+    font-size: 1.3rem;
+    font-weight: bold;
     color: var(--accent-gold);
-    margin-top: 5px;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    text-shadow: 1px 1px 2px black; /* 文字の影を強くして読みやすく */
 }
 
-/* --- ツアーコントローラー --- */
+/* コントローラー */
 .bottom-panel {
     position: absolute;
     bottom: 30px; left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
     border-radius: 40px;
-    padding: 15px 25px;
+    padding: 15px 20px;
     text-align: center;
-    width: 90%;
+    width: 95%; /* スマホで見切れにくいように調整 */
     max-width: 420px;
-    border-bottom: 1px solid rgba(192, 160, 96, 0.3); /* 下部に微かな金の光 */
 }
 
 .tour-info {
     font-size: 0.9rem;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     color: var(--text-secondary);
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    letter-spacing: 1px;
 }
 #tour-progress { color: var(--accent-cyan); font-weight: bold; }
 
 .tour-buttons {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
+    gap: 10px;
 }
 
-/* 発光ボタン */
 .glow-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: var(--text-primary);
-    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 10px 14px;
     border-radius: 20px;
+    font-size: 0.9rem;
     cursor: pointer;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
 }
-
-.glow-btn:hover {
-    background: rgba(64, 224, 208, 0.2);
-    border-color: var(--accent-cyan);
-    box-shadow: 0 0 15px rgba(64, 224, 208, 0.4);
-}
-
 .play-btn.primary {
-    background: linear-gradient(135deg, rgba(192, 160, 96, 0.2), rgba(192, 160, 96, 0.4));
-    border: 1px solid var(--accent-gold);
+    background: rgba(192, 160, 96, 0.3);
+    border-color: var(--accent-gold);
     color: var(--accent-gold);
+    font-weight: bold;
     flex-grow: 2;
-    font-weight: 500;
-    letter-spacing: 1px;
-}
-.play-btn.primary:hover {
-    background: linear-gradient(135deg, rgba(192, 160, 96, 0.4), rgba(192, 160, 96, 0.6));
-    box-shadow: 0 0 20px rgba(192, 160, 96, 0.6);
-    color: #fff;
 }
 
-/* --- 情報パネル（ポップアップ） --- */
+/* ポップアップ */
 .popup-panel {
     position: absolute;
     top: 50%; left: 50%;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%);
     width: 85%; max-width: 360px;
-    border-radius: 24px;
+    border-radius: 20px;
     z-index: 2000;
-    overflow: hidden;
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); /* 滑らかな動き */
+    transition: all 0.3s ease;
     opacity: 1;
-    border: 1px solid rgba(192, 160, 96, 0.3);
 }
-
 #info-panel.hidden {
     opacity: 0;
     pointer-events: none;
-    transform: translate(-50%, -45%) scale(0.9);
-    filter: blur(10px); /* 消える時にぼかす */
+    transform: translate(-50%, -40%);
 }
 
 .panel-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 15px 25px;
-    background: linear-gradient(to right, rgba(192, 160, 96, 0.15), transparent);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
-
 .panel-header h2 {
     margin: 0;
-    font-family: 'Shippori Mincho', serif;
     color: var(--accent-gold);
-    font-size: 1.8rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    font-family: 'Shippori Mincho', serif;
 }
-
 .close-btn {
-    background: transparent; border: none;
-    font-size: 1.8rem; color: var(--text-secondary);
-    padding: 0; width: 40px; height: 40px;
-    line-height: 40px; cursor: pointer;
-    transition: color 0.3s;
+    background: transparent; border: none; color: white;
+    font-size: 1.5rem; width: 30px;
 }
-.close-btn:hover { color: var(--accent-cyan); }
 
 .panel-content {
-    padding: 35px 25px;
+    padding: 20px;
     text-align: center;
-    position: relative;
 }
-
 .label {
-    display: block;
-    font-size: 0.8rem;
-    color: var(--accent-cyan);
-    margin-bottom: 8px;
-    font-weight: 300;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    display: block; font-size: 0.8rem; color: var(--accent-cyan);
+    margin-bottom: 5px;
 }
-
 .value {
-    display: block;
-    font-size: 2.2rem;
+    display: block; font-size: 1.8rem;
     font-family: 'Shippori Mincho', serif;
-    color: #fff;
-    font-weight: 500;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    font-weight: bold;
 }
-
 .panel-emblem {
-    position: absolute;
-    bottom: 10px; right: 15px;
-    font-size: 3rem;
-    opacity: 0.1;
-    filter: grayscale(100%);
+    display: none; /* 視認性優先のため装飾を削除 */
 }
 
-/* --- マーカーデザイン (神秘的なオーブ) --- */
+/* マーカー */
 .custom-icon {
-    /* 中心が明るく、外側がぼんやり光る */
-    background: radial-gradient(circle at center, #fff 0%, var(--accent-gold) 30%, transparent 70%);
+    background: radial-gradient(circle, #fff 0%, var(--accent-gold) 60%, transparent 100%);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--accent-gold), inset 0 0 5px #fff;
-    animation: breath 3s infinite ease-in-out;
+    box-shadow: 0 0 10px black; /* 背景が明るくても見えるように黒い影を追加 */
+    animation: pulse 2s infinite;
 }
-/* 選択中のマーカー（青く強く光る） */
 .custom-icon.active {
-     background: radial-gradient(circle at center, #fff 0%, var(--accent-cyan) 40%, transparent 75%);
-     box-shadow: 0 0 25px var(--accent-cyan), inset 0 0 8px #fff;
-     animation: breath-active 2s infinite ease-in-out;
+    background: radial-gradient(circle, #fff 0%, var(--accent-cyan) 60%, transparent 100%);
+    box-shadow: 0 0 15px black;
 }
-
-@keyframes breath {
-    0%, 100% { transform: scale(0.8); opacity: 0.6; }
-    50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 20px var(--accent-gold); }
-}
-@keyframes breath-active {
-    0%, 100% { transform: scale(1.0); opacity: 0.8; }
-    50% { transform: scale(1.4); opacity: 1; box-shadow: 0 0 35px var(--accent-cyan); }
-}
+@keyframes pulse { 0% { transform: scale(0.9); } 50% { transform: scale(1.1); } 100% { transform: scale(0.9); } }
