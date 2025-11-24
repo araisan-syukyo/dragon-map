@@ -1,14 +1,11 @@
 :root {
-    /* 背景を宇宙っぽい濃紺から、少し明るいディープブルーへ */
-    --main-bg: #1a1a2e; 
+    --main-bg: #1a1a2e;
     --accent-cyan: #00ffff;
     --accent-gold: #ffd700;
     --text-primary: #ffffff;
-    --text-secondary: #cccccc;
-    
-    /* パネルの背景を少し濃くして、文字の可読性を上げる */
-    --glass-bg: rgba(0, 10, 30, 0.85);
-    --glass-border: rgba(255, 255, 255, 0.2);
+    /* パネル背景：衛星写真の上でも読めるよう、かなり濃い黒に */
+    --glass-bg: rgba(0, 0, 0, 0.85); 
+    --glass-border: rgba(255, 255, 255, 0.3);
 }
 
 body, html {
@@ -27,7 +24,7 @@ body, html {
     width: 100%;
 }
 
-/* --- 地図コンテナ --- */
+/* --- 地図エリア --- */
 #map-container {
     position: absolute;
     top: 0; left: 0;
@@ -38,154 +35,180 @@ body, html {
     height: 100%;
     width: 100%;
     z-index: 0;
-    /* 地図自体の明るさはそのまま（衛星写真を見やすく） */
 }
 
-/* ★修正点：画面を暗くしていた「ビネット効果（四隅の影）」を削除しました */
-#map-container::after {
-    display: none; 
-}
-
-/* --- パネルデザイン --- */
+/* --- 共通パネルデザイン（コンパクト化） --- */
 .glass-panel {
     background: var(--glass-bg);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: 1px solid var(--glass-border);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8); /* 影を濃くして浮き上がらせる */
 }
 
-/* ヘッダー */
+/* ヘッダー：極小サイズ */
 .top-panel {
     position: absolute;
-    top: 20px; left: 50%;
+    top: 10px; left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
-    padding: 10px 20px;
-    border-radius: 30px;
+    padding: 5px 12px;
+    border-radius: 15px;
     text-align: center;
-    width: 90%;
-    max-width: 500px;
+    width: auto;
+    min-width: 240px;
+    white-space: nowrap;
 }
 
 h1 {
     margin: 0;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 2px;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
     color: var(--accent-cyan);
+    opacity: 0.8;
 }
 
 .subtitle {
     font-family: 'Shippori Mincho', serif;
-    font-size: 1.3rem;
+    font-size: 0.9rem;
     font-weight: bold;
     color: var(--accent-gold);
-    text-shadow: 1px 1px 2px black; /* 文字の影を強くして読みやすく */
+    margin-top: 0px;
+    text-shadow: 1px 1px 2px black;
 }
 
-/* コントローラー */
+/* コントローラー：画面下部にコンパクト配置 */
 .bottom-panel {
     position: absolute;
-    bottom: 30px; left: 50%;
+    bottom: 25px; left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
-    border-radius: 40px;
-    padding: 15px 20px;
+    border-radius: 25px;
+    padding: 8px 12px;
     text-align: center;
-    width: 95%; /* スマホで見切れにくいように調整 */
-    max-width: 420px;
+    width: auto;
+    min-width: 280px;
 }
 
 .tour-info {
-    font-size: 0.9rem;
-    margin-bottom: 10px;
-    color: var(--text-secondary);
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+    color: #ccc;
 }
 #tour-progress { color: var(--accent-cyan); font-weight: bold; }
 
 .tour-buttons {
     display: flex;
-    justify-content: space-between;
-    gap: 10px;
+    justify-content: center;
+    gap: 8px;
 }
 
+/* ボタン */
 .glow-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     color: white;
-    padding: 10px 14px;
-    border-radius: 20px;
-    font-size: 0.9rem;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
     cursor: pointer;
+    transition: 0.2s;
 }
+.glow-btn:active {
+    background: var(--accent-cyan);
+    color: black;
+}
+
 .play-btn.primary {
-    background: rgba(192, 160, 96, 0.3);
+    background: rgba(192, 160, 96, 0.5); /* 少し濃く */
     border-color: var(--accent-gold);
     color: var(--accent-gold);
     font-weight: bold;
-    flex-grow: 2;
+    min-width: 90px;
 }
 
-/* ポップアップ */
+/* ★ 情報パネル（ポップアップ）：ここを大幅改善 ★ */
 .popup-panel {
     position: absolute;
-    top: 50%; left: 50%;
+    /* ピン（地図中心）を見やすくするため、中心より少し下に配置 */
+    top: 65%; 
+    left: 50%;
     transform: translate(-50%, -50%);
-    width: 85%; max-width: 360px;
-    border-radius: 20px;
+    
+    width: auto;
+    min-width: 220px; /* 幅を小さく */
+    max-width: 280px;
+    
+    border-radius: 12px;
     z-index: 2000;
-    transition: all 0.3s ease;
-    opacity: 1;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
+    /* 枠線を金色にして目立たせる */
+    border: 1px solid var(--accent-gold);
 }
+
 #info-panel.hidden {
     opacity: 0;
     pointer-events: none;
-    transform: translate(-50%, -40%);
+    transform: translate(-50%, -40%) scale(0.9);
 }
 
 .panel-header {
     display: flex;
     justify-content: space-between;
-    padding: 15px 20px;
+    align-items: center;
+    padding: 6px 12px; /* 余白削減 */
+    background: rgba(255, 215, 0, 0.1); /* ヘッダーだけ少し色付け */
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
+
 .panel-header h2 {
     margin: 0;
+    font-size: 0.95rem; /* 文字サイズ調整 */
     color: var(--accent-gold);
     font-family: 'Shippori Mincho', serif;
 }
+
 .close-btn {
-    background: transparent; border: none; color: white;
-    font-size: 1.5rem; width: 30px;
+    background: transparent; border: none; color: #ddd;
+    font-size: 1.2rem; padding: 0; width: 20px; height: 20px;
+    line-height: 20px;
 }
 
 .panel-content {
-    padding: 20px;
+    padding: 10px 10px; /* コンテンツ部分もコンパクトに */
     text-align: center;
 }
+
 .label {
-    display: block; font-size: 0.8rem; color: var(--accent-cyan);
-    margin-bottom: 5px;
-}
-.value {
-    display: block; font-size: 1.8rem;
-    font-family: 'Shippori Mincho', serif;
-    font-weight: bold;
-}
-.panel-emblem {
-    display: none; /* 視認性優先のため装飾を削除 */
+    display: block; 
+    font-size: 0.65rem; 
+    color: var(--accent-cyan);
+    margin-bottom: 2px;
+    opacity: 0.9;
 }
 
-/* マーカー */
+.value {
+    display: block; 
+    font-size: 1.3rem; /* サイズはキープしつつ太字で読みやすく */
+    font-family: 'Shippori Mincho', serif;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    line-height: 1.2;
+}
+
+.panel-emblem { display: none; }
+
+/* マーカー調整 */
 .custom-icon {
     background: radial-gradient(circle, #fff 0%, var(--accent-gold) 60%, transparent 100%);
     border-radius: 50%;
-    box-shadow: 0 0 10px black; /* 背景が明るくても見えるように黒い影を追加 */
+    box-shadow: 0 0 5px #000; /* 黒い影でくっきり */
     animation: pulse 2s infinite;
 }
 .custom-icon.active {
     background: radial-gradient(circle, #fff 0%, var(--accent-cyan) 60%, transparent 100%);
-    box-shadow: 0 0 15px black;
+    box-shadow: 0 0 10px #000;
 }
 @keyframes pulse { 0% { transform: scale(0.9); } 50% { transform: scale(1.1); } 100% { transform: scale(0.9); } }
