@@ -18,7 +18,7 @@ L.control.zoom({ position: 'topright' }).addTo(map);
 const zoomControlContainer = document.querySelector('.leaflet-top.leaflet-right');
 zoomControlContainer.style.marginTop = '80px'; 
 
-// --- 龍体データ（ファクト×詩的表現版） ---
+// --- 龍体データ ---
 const dragonData = [
     // 頭部
     { 
@@ -216,7 +216,8 @@ function startTour() {
     
     if (currentTourIndex === -1) currentTourIndex = -1;
     playNextStep();
-    tourInterval = setInterval(playNextStep, 5000); // 5秒間隔
+    // ★変更点: 12秒から10秒に変更
+    tourInterval = setInterval(playNextStep, 10000);
 }
 
 function stopTour() {
@@ -247,13 +248,13 @@ function jumpToStep(index) {
     }
 
     const targetZoom = data.zoom || 9;
-    map.flyTo([data.lat, data.lng], targetZoom, { duration: 2.0 });
+    map.flyTo([data.lat, data.lng], targetZoom, { duration: 3.0 });
 
     showDetails(data);
     updateTourStatus();
 }
 
-// 詳細パネル表示（ラベル＋値＋解説）
+// 詳細パネル表示
 function showDetails(data) {
     const panelContent = document.querySelector('.panel-content');
     panelContent.innerHTML = `
